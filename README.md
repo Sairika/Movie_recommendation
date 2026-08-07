@@ -1,7 +1,7 @@
 # HybridFlix: A Hybrid Movie Recommendation System
 A sophisticated hybrid movie recommendation system that combines content-based and collaborative filtering approaches to deliver personalized movie suggestions. The system addresses common challenges in recommendation systems such as cold start problems and data sparsity while maintaining high accuracy and diversity.
 
-## 🎯 Key Features
+## Key Features
 
 - **Hybrid Approach**: Combines content-based and collaborative filtering for superior recommendations
 - **Advanced Text Processing**: Utilizes TF-IDF vectorization and cosine similarity for content analysis
@@ -10,7 +10,7 @@ A sophisticated hybrid movie recommendation system that combines content-based a
 - **Scalable Architecture**: Built with Python and optimized for large-scale datasets
 - **Real-time Processing**: Designed for responsive recommendation generation
 
-## 📊 System Architecture
+## System Architecture
 
 The HybridFlix system consists of three main components:
 
@@ -18,7 +18,7 @@ The HybridFlix system consists of three main components:
 2. **Collaborative Filtering**: Leverages user interaction patterns and rating matrices
 3. **Hybrid Model**: Dynamically combines both approaches with weighted scoring
 
-## 🛠️ Technologies Used
+## Technologies Used
 
 - **Python**: Core programming language
 - **Pandas**: Data manipulation and analysis
@@ -27,7 +27,7 @@ The HybridFlix system consists of three main components:
 - **Matplotlib/Seaborn**: Data visualization
 - **Jupyter Notebook**: Development environment
 
-## 📈 Performance Metrics
+## Performance Metrics
 
 The system is evaluated using multiple metrics:
 
@@ -36,7 +36,7 @@ The system is evaluated using multiple metrics:
 - **Novelty**: Evaluates the discovery of less popular movies
 - **NDCG**: Normalized Discounted Cumulative Gain for ranking quality
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
@@ -82,7 +82,7 @@ recommendations = hybrid_recommender.get_recommendations(movie_title, n_recommen
 print(recommendations)
 ```
 
-## 📊 Results
+## Results
 
 The hybrid system demonstrates balanced performance across all evaluation metrics:
 
@@ -98,7 +98,7 @@ The hybrid system demonstrates balanced performance across all evaluation metric
 | Collaborative | Inception | 0.9998 |
 | Hybrid | The Dark Knight Rises | 0.6000 |
 
-## 🔧 System Components
+## System Components
 
 ### Data Processing
 - **Feature Engineering**: Combines movie overviews, keywords, and genres
@@ -115,7 +115,7 @@ The hybrid system demonstrates balanced performance across all evaluation metric
 - **Novelty Assessment**: Measures average popularity of recommended movies
 - **NDCG Computation**: Evaluates ranking quality with relevance consideration
 
-## 🎯 Future Enhancements
+## Future Enhancements
 
 - **Deep Learning Integration**: Implement neural networks for complex pattern recognition
 - **Sentiment Analysis**: Incorporate user review sentiment for enhanced recommendations
@@ -125,7 +125,7 @@ The hybrid system demonstrates balanced performance across all evaluation metric
 
 
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
 
@@ -135,11 +135,11 @@ Contributions are welcome! Please feel free to submit a Pull Request. For major 
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - The Movie Database (TMDB) for providing the dataset
 - Open source community for various libraries and tools
