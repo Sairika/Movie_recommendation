@@ -1,145 +1,137 @@
-# HybridFlix: A Hybrid Movie Recommendation System
-A sophisticated hybrid movie recommendation system that combines content-based and collaborative filtering approaches to deliver personalized movie suggestions. The system addresses common challenges in recommendation systems such as cold start problems and data sparsity while maintaining high accuracy and diversity.
+# HybridFlix: A Hybrid Approach to Personalized Movie Recommendations
+
+Academic course project — Dept. of Electronics and Telecommunication Engineering, Chittagong University of Engineering and Technology (CUET)
+
+**Authors:** Sabrina Sultana, Mehlaqa
+**Advisor:** Dr. Nursadul Mamun
+
+A hybrid movie recommendation system that combines content-based and collaborative filtering to generate personalized movie suggestions. The system blends TF-IDF-based content similarity with a Bayesian-adjusted collaborative signal, then evaluates the result against diversity, novelty, and NDCG to address common issues like the cold-start problem and popularity bias.
+
+📄 **[Read the full paper](./paper/HybridFlix_paper.pdf)**
+
+---
+
+## Overview
+
+Recommender systems typically rely on either content-based filtering (recommending items similar to what a user liked) or collaborative filtering (recommending items liked by similar users). Each has weaknesses — content-based filtering struggles with diversity, and collaborative filtering struggles with new users/items (cold start) and popularity bias. HybridFlix combines both with a tunable weighting scheme, and is evaluated quantitatively rather than just eyeballed.
 
 ## Key Features
 
-- **Hybrid Approach**: Combines content-based and collaborative filtering for superior recommendations
-- **Advanced Text Processing**: Utilizes TF-IDF vectorization and cosine similarity for content analysis
-- **Bayesian Rating System**: Implements weighted ratings to handle popularity bias
-- **Comprehensive Evaluation**: Measures performance using diversity, novelty, and NDCG metrics
-- **Scalable Architecture**: Built with Python and optimized for large-scale datasets
-- **Real-time Processing**: Designed for responsive recommendation generation
+- **Hybrid recommender**: combines content-based and collaborative filtering with a dynamic weighting parameter (α)
+- **TF-IDF + cosine similarity** over movie overviews, keywords (2× weight), and genres (3× weight)
+- **Bayesian rating averaging** to correct for popularity bias in raw vote averages
+- **Quantitative evaluation**: similarity, diversity, novelty, and NDCG, compared across all three approaches (content-based, collaborative, hybrid)
+- **Visualized results**: heatmaps comparing model performance across metrics
 
-## System Architecture
+## Methodology
 
-The HybridFlix system consists of three main components:
+1. **Data preprocessing** — merge TMDB movies + credits datasets, build a combined text feature from overview, keywords, and genres, and compute a Bayesian-weighted rating.
+2. **Content-based model** — TF-IDF vectorize the combined feature and compute cosine similarity between movies.
+3. **Collaborative model** — build a similarity signal from the (Bayesian-adjusted) rating structure.
+4. **Hybrid model** — combine both scores:
 
-1. **Content-Based Recommender**: Analyzes movie features (genres, keywords, overviews) using TF-IDF vectorization
-2. **Collaborative Filtering**: Leverages user interaction patterns and rating matrices
-3. **Hybrid Model**: Dynamically combines both approaches with weighted scoring
+   ```
+   Hybrid Score(i) = α × Content Similarity(i) + (1 − α) × Collaborative Similarity(i)
+   ```
 
-## Technologies Used
+5. **Evaluation** — compute diversity (unique genres in top-N), novelty (inverse of average popularity), and NDCG (ranking quality) for each approach, and visualize as a heatmap.
 
-- **Python**: Core programming language
-- **Pandas**: Data manipulation and analysis
-- **Scikit-learn**: Machine learning algorithms and TF-IDF vectorization
-- **NumPy**: Numerical computing
-- **Matplotlib/Seaborn**: Data visualization
-- **Jupyter Notebook**: Development environment
+Full derivations and related work are in the [paper](./paper/HybridFlix_paper.pdf).
 
-## Performance Metrics
+## Sample Results — Recommendations for "The Dark Knight"
 
-The system is evaluated using multiple metrics:
+| Approach       | Top Recommendation      | Similarity Score |
+|----------------|--------------------------|-------------------|
+| Content-Based  | The Dark Knight Rises    | 0.6805            |
+| Collaborative  | Inception                 | 0.9998            |
+| Hybrid         | The Dark Knight Rises    | 0.6000            |
 
-- **Similarity**: Measures recommendation relevance
-- **Diversity**: Assesses genre variety in recommendations
-- **Novelty**: Evaluates the discovery of less popular movies
-- **NDCG**: Normalized Discounted Cumulative Gain for ranking quality
+| Approach       | Diversity | Novelty | NDCG |
+|----------------|-----------|---------|------|
+| Content-Based  | Lower     | 0.087   | 1.00 |
+| Collaborative  | 28.370    | 0.143   | 1.00 |
+| Hybrid         | 26.160    | 0.095   | 1.00 |
+
+*(See `results/evaluation_heatmap.png` for the full metric comparison across models.)*
+
+![Evaluation heatmap](./results/evaluation_heatmap.png)
+
+## Project Structure
+
+```
+Movie_recommendation/
+│
+├── data/
+│   ├── tmdb_5000_credits.csv
+│   └── tmdb_5000_movies.csv
+│
+├── notebooks/
+│   └── Movie_recommender_system.ipynb    # main notebook: preprocessing, models, evaluation
+│
+├── paper/
+│   └── HybridFlix_paper.pdf              # full written report
+│
+├── results/
+│   └── evaluation_heatmap.png            # exported figure(s) from the notebook
+│
+├── requirements.txt
+├── LICENSE
+└── README.md
+```
+
+> **Note on reorganizing:** the dataset folders (`tmdb_5000_credits/`, `tmdb_5000_movies/`) should be moved into a single `data/` folder as shown above, the notebook into `notebooks/`, and the paper PDF into `paper/`. Any figures the notebook generates (e.g. the evaluation heatmap) should be exported as `.png` and saved into `results/` so they can be embedded here in the README instead of only living inside notebook cell outputs.
 
 ## Getting Started
 
 ### Prerequisites
 
-```bash
-Python 3.7+
-pip (Python package manager)
+```
+Python 3.9+
+pip
 ```
 
 ### Installation
 
-1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/hybridflix.git
-cd hybridflix
-```
-
-2. Install required packages:
-```bash
+git clone https://github.com/Sairika/Movie_recommendation.git
+cd Movie_recommendation
 pip install -r requirements.txt
 ```
 
-3. Download the TMDB dataset:
-   - Visit [TMDB Movie Metadata on Kaggle](https://www.kaggle.com/datasets/tmdb/tmdb-movie-metadata)
-   - Download and place the dataset in the `data/` directory
+### Dataset
+
+This project uses the [TMDB 5000 Movie Dataset](https://www.kaggle.com/datasets/tmdb/tmdb-movie-metadata). The CSVs are already included under `data/`; if you're starting fresh, download them from Kaggle and place them there.
 
 ### Usage
 
-1. Launch Jupyter Notebook:
 ```bash
-jupyter notebook
+jupyter notebook notebooks/Movie_recommender_system.ipynb
 ```
 
-2. Open the main notebook file and run the cells sequentially
+Run the cells in order. The notebook loads and preprocesses the data, fits the content-based, collaborative, and hybrid models, and generates recommendations plus an evaluation heatmap for a sample movie (`"The Dark Knight"` by default — change `movie_title` in the `main()` cell to try others).
 
-3. The system will process the data and generate recommendations based on your input
+## Technologies Used
 
-### Example Usage
+- **Python** — core language
+- **Pandas / NumPy** — data manipulation
+- **Scikit-learn** — TF-IDF vectorization, cosine similarity
+- **SciPy** — Spearman correlation for evaluation
+- **Matplotlib / Seaborn** — visualization
+- **Jupyter Notebook** — development environment
 
-```python
-# Get recommendations for a specific movie
-movie_title = "The Dark Knight"
-recommendations = hybrid_recommender.get_recommendations(movie_title, n_recommendations=10)
-print(recommendations)
-```
+## Limitations & Future Work
 
-## Results
-
-The hybrid system demonstrates balanced performance across all evaluation metrics:
-
-- **Content-Based**: High similarity scores but limited diversity
-- **Collaborative Filtering**: Excellent diversity and novelty scores
-- **Hybrid Model**: Optimal balance between accuracy and diversity
-
-### Sample Recommendations for "The Dark Knight"
-
-| Approach | Top Recommendations | Similarity Score |
-|----------|-------------------|------------------|
-| Content-Based | The Dark Knight Rises | 0.6805 |
-| Collaborative | Inception | 0.9998 |
-| Hybrid | The Dark Knight Rises | 0.6000 |
-
-## System Components
-
-### Data Processing
-- **Feature Engineering**: Combines movie overviews, keywords, and genres
-- **Weighted Features**: Keywords (2x weight), Genres (3x weight)
-- **Bayesian Rating**: Normalizes ratings based on vote counts and popularity
-
-### Recommendation Algorithms
-- **TF-IDF Vectorization**: Converts text features to numerical vectors
-- **Cosine Similarity**: Measures similarity between movies and users
-- **Dynamic Weighting**: Balances content and collaborative components
-
-### Evaluation Framework
-- **Diversity Calculation**: Counts unique genres in recommendations
-- **Novelty Assessment**: Measures average popularity of recommended movies
-- **NDCG Computation**: Evaluates ranking quality with relevance consideration
-
-## Future Enhancements
-
-- **Deep Learning Integration**: Implement neural networks for complex pattern recognition
-- **Sentiment Analysis**: Incorporate user review sentiment for enhanced recommendations
-- **Real-time Processing**: Implement streaming data processing with Apache Spark
-- **Multi-modal Support**: Add support for movie posters and trailers
-- **A/B Testing Framework**: Implement systematic evaluation of recommendation strategies
-
-
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+- Novelty scores are relatively low across all three approaches, suggesting recommendations skew toward popular titles.
+- Both content-based and collaborative components currently run at O(n²) complexity via pairwise cosine similarity, which won't scale past the 5000-movie dataset without approximate nearest-neighbor methods.
+- The collaborative component uses item-level rating structure rather than a full user-item interaction matrix, since the TMDB dataset doesn't include individual user ratings — a natural next step is testing against a dataset with real user-level interactions (e.g. MovieLens).
+- Planned extensions (see the paper for details): deep learning-based representations, sentiment analysis from user reviews, and real-time processing with a streaming framework.
 
 ## Acknowledgments
 
-- The Movie Database (TMDB) for providing the dataset
-- Open source community for various libraries and tools
+This project was completed as a course project in the Dept. of Electronics and Telecommunication Engineering, CUET, under the guidance of **Dr. Nursadul Mamun**, whose feedback shaped the methodology and evaluation approach.
+
+Dataset provided by [The Movie Database (TMDB)](https://www.themoviedb.org/).
+
+## License
+
+This project is licensed under the MIT License — see [LICENSE](./LICENSE) for details.
